@@ -56,15 +56,17 @@
 			var objectStore = db.transaction("coords").objectStore("coords");
 			var allDat = objectStore.getAll();
 			allDat.onsuccess = function() {
-					alert(allDat.result.length)
 					console.log(allDat.result)
-					$('#preDat').html('');
-
+					$('#preDat').html(allDat.result.length+'<br>');
+					for (var i = 0; i < allDat.result.length; i++) {
+						var elm = allDat.result[i];
+						$('#preDat').append(elm.coord+' _ '+elm.timed+'<br>');
+					}
 					if (allDat.result.length>0) {
 						$('#trackme').hide();
 						$('#untrackme').show();
 
-						if (geoloc) {
+						if (geoloc && !watchpos) {
 							watchpos = geoloc.watchPosition(function (pos) {
 								add({
 									coord: pos.coords.longitude+","+pos.coords.latitude,
