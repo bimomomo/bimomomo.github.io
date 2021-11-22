@@ -44,6 +44,7 @@
 		request.onsuccess = function(event) {
 			db = request.result;
 			console.log("success: "+ db);
+			readAll()
 		};
 		
 		request.onupgradeneeded = function(event) {
@@ -62,6 +63,20 @@
 					if (allDat.result.length>0) {
 						$('#trackme').hide();
 						$('#untrackme').show();
+
+						if (geoloc) {
+							watchpos = geoloc.watchPosition(function (pos) {
+								add({
+									coord: pos.coords.longitude+","+pos.coords.latitude,
+									timed: new Date().getTime(),
+								});
+							},function (err) {
+								alert("Error! - Terjadi masalah saat mengambil lokasi - error")
+								console.log(err)
+							})
+								$('#trackme').hide();
+								$('#untrackme').show();
+						}
 					}else{
 						$('#untrackme').hide();
 						$('#trackme').show();
@@ -108,7 +123,6 @@
 	<script>
 
 		$(document).ready(function () {
-			readAll();
 			$('#trackme').click(function (e) { 
 				e.preventDefault();
 				if (geoloc) {
@@ -121,12 +135,16 @@
 						alert("Error! - Terjadi masalah saat mengambil lokasi - error")
 						console.log(err)
 					})
+						$('#trackme').hide();
+						$('#untrackme').show();
 				}
 			});
 
 			$('#untrackme').click(function (e) { 
 				e.preventDefault();
 				cleardb()
+						$('#untrackme').hide();
+						$('#trackme').show();
 
 			});
 
