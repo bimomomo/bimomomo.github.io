@@ -11,8 +11,14 @@
 	<button id="untrackme">Un-Track Me</button>
 	<br>
 	<button id="readcoord">read</button>
+	<pre id="preDat">
+
+	</pre>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 	<script type = "text/javascript">
+		
+		var geoloc = navigator.geolocation;
+		var watchpos;
 		 
 		//prefixes of implementation that we want to test
 		window.indexedDB = window.indexedDB || window.mozIndexedDB || 
@@ -25,50 +31,44 @@
 		window.msIDBKeyRange
 		
 		if (!window.indexedDB) {
-		   window.alert("Your browser doesn't support a stable version of IndexedDB.")
+			window.alert("Your browser doesn't support a stable version of IndexedDB.")
 		}
 
 		var db;
 		var request = window.indexedDB.open("dbcoordinate", 1);
 		
 		request.onerror = function(event) {
-		   console.log("error: ");
+			console.log("error: ");
 		};
 		
 		request.onsuccess = function(event) {
-		   db = request.result;
-		   console.log("success: "+ db);
+			db = request.result;
+			console.log("success: "+ db);
 		};
 		
 		request.onupgradeneeded = function(event) {
-		   var db = event.target.result;
-		   var objectStore = db.createObjectStore("coords", {keyPath: "id", autoIncrement: true});
-		}
-		
-		function read() {
-		   var transaction = db.transaction(["coords"]);
-		   var objectStore = transaction.objectStore("coords");
-		   var request = objectStore.get("00-03");
-		   
-		   request.onerror = function(event) {
-			  alert("Unable to retrieve daa from database!");
-		   };
-		   
-		   request.onsuccess = function(event) {
-			  // Do something with the request.result!
-			  if(request.result) {
-				 alert("Name: " + request.result.name + ", Age: " + request.result.age + ", Email: " + request.result.email);
-			  } else {
-				 alert("Kenny couldn't be found in your database!");
-			  }
-		   };
+			var db = event.target.result;
+			var objectStore = db.createObjectStore("coords", {keyPath: "id", autoIncrement: true});
 		}
 		
 		function readAll() {
-		   var objectStore = db.transaction("coords").objectStore("coords");
-		   console.log(objectStore.getAll())
-		   
-		//    objectStore.openCursor().onsuccess = function(event) {
+			var objectStore = db.transaction("coords").objectStore("coords");
+			var allDat = objectStore.getAll();
+			allDat.onsuccess = function() {
+					alert(allDat.result.length)
+					console.log(allDat.result)
+					$('#preDat').html('');
+
+					if (allDat.result.length>0) {
+						$('#trackme').hide();
+						$('#untrackme').show();
+					}else{
+						$('#untrackme').hide();
+						$('#trackme').show();
+					}
+			}
+			
+		//	 objectStore.openCursor().onsuccess = function(event) {
 		// 	  var cursor = event.target.result;
 			  
 		// 	  if (cursor) {
@@ -77,45 +77,42 @@
 		// 	  } else {
 		// 		 alert("No more entries!");
 		// 	  }
-		//    };
+		//	 };
 		}
 		
 		function add(data) {
-		   var request = db.transaction(["coords"], "readwrite")
-		   .objectStore("coords")
-		   .add(data);
-		   
-		   request.onsuccess = function(event) {
+			var request = db.transaction(["coords"], "readwrite")
+			.objectStore("coords")
+			.add(data);
+			
+			request.onsuccess = function(event) {
 			  console.log("Coord has been added to your database.");
-		   };
-		   
-		   request.onerror = function(event) {
+			};
+			
+			request.onerror = function(event) {
 			  console.log("Unable to add data!");
-		   }
-		}
-		
-		function remove() {
-		   var request = db.transaction(["coords"], "readwrite")
-		   .objectStore("coords")
-		   .delete("00-03");
-		   
-		   request.onsuccess = function(event) {
-			  alert("Kenny's entry has been removed from your database.");
-		   };
+			}
 		}
 
-		function cleardb(db) {
-		   window.indexedDB.deleteDatabase(db);
+		function cleardb() {
+			var g  = geoloc;
+			var objectStore = db.transaction(["coords"], "readwrite").objectStore("coords");
+			var request = objectStore.clear();
+			request.onsuccess = function(event) {
+				// report the success of our request
+				alert('BERSIH');
+				g.clearWatch(watchpos);
+			};
 		}
 	</script>
 	<script>
 
 		$(document).ready(function () {
+			readAll();
 			$('#trackme').click(function (e) { 
 				e.preventDefault();
-				if (navigator.geolocation) {
-					navigator.geolocation.watchPosition(function (pos) {
-						// console.log([pos.coords.longitude, pos.coords.latitude]);
+				if (geoloc) {
+					watchpos = geoloc.watchPosition(function (pos) {
 						add({
 							coord: pos.coords.longitude+","+pos.coords.latitude,
 							timed: new Date().getTime(),
@@ -129,7 +126,7 @@
 
 			$('#untrackme').click(function (e) { 
 				e.preventDefault();
-				cleardb('dbcoordinate')
+				cleardb()
 
 			});
 
