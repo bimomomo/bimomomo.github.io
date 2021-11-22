@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>TRACK THIS</title>
+</head>
+<body>
+	<button id="trackme">Track Me</button>
+	<button id="untrackme">Un-Track Me</button>
+	<br>
+	<button id="readcoord">read</button>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+	<script type = "text/javascript">
+		 
+		//prefixes of implementation that we want to test
+		window.indexedDB = window.indexedDB || window.mozIndexedDB || 
+		window.webkitIndexedDB || window.msIndexedDB;
+		
+		//prefixes of window.IDB objects
+		window.IDBTransaction = window.IDBTransaction || 
+		window.webkitIDBTransaction || window.msIDBTransaction;
+		window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || 
+		window.msIDBKeyRange
+		
+		if (!window.indexedDB) {
+		   window.alert("Your browser doesn't support a stable version of IndexedDB.")
+		}
+
+		var db;
+		var request = window.indexedDB.open("dbcoordinate", 1);
+		
+		request.onerror = function(event) {
+		   console.log("error: ");
+		};
+		
+		request.onsuccess = function(event) {
+		   db = request.result;
+		   console.log("success: "+ db);
+		};
+		
+		request.onupgradeneeded = function(event) {
+		   var db = event.target.result;
+		   var objectStore = db.createObjectStore("coords", {keyPath: "id", autoIncrement: true});
+		}
+		
+		function read() {
+		   var transaction = db.transaction(["coords"]);
+		   var objectStore = transaction.objectStore("coords");
+		   var request = objectStore.get("00-03");
+		   
+		   request.onerror = function(event) {
+			  alert("Unable to retrieve daa from database!");
+		   };
+		   
+		   request.onsuccess = function(event) {
+			  // Do something with the request.result!
+			  if(request.result) {
+				 alert("Name: " + request.result.name + ", Age: " + request.result.age + ", Email: " + request.result.email);
+			  } else {
+				 alert("Kenny couldn't be found in your database!");
+			  }
+		   };
+		}
+		
+		function readAll() {
+		   var objectStore = db.transaction("coords").objectStore("coords");
+		   console.log(objectStore.getAll())
+		   
+		//    objectStore.openCursor().onsuccess = function(event) {
+		// 	  var cursor = event.target.result;
+			  
+		// 	  if (cursor) {
+		// 		 alert("Name for id " + cursor.key + " is " + cursor.value.name + ", Age: " + cursor.value.age + ", Email: " + cursor.value.email);
+		// 		 cursor.continue();
+		// 	  } else {
+		// 		 alert("No more entries!");
+		// 	  }
+		//    };
+		}
+		
+		function add(data) {
+		   var request = db.transaction(["coords"], "readwrite")
+		   .objectStore("coords")
+		   .add(data);
+		   
+		   request.onsuccess = function(event) {
+			  console.log("Coord has been added to your database.");
+		   };
+		   
+		   request.onerror = function(event) {
+			  console.log("Unable to add data!");
+		   }
+		}
+		
+		function remove() {
+		   var request = db.transaction(["coords"], "readwrite")
+		   .objectStore("coords")
+		   .delete("00-03");
+		   
+		   request.onsuccess = function(event) {
+			  alert("Kenny's entry has been removed from your database.");
+		   };
+		}
+
+		function cleardb(db) {
+		   window.indexedDB.deleteDatabase(db);
+		}
+	</script>
+	<script>
+
+		$(document).ready(function () {
+			$('#trackme').click(function (e) { 
+				e.preventDefault();
+				if (navigator.geolocation) {
+					navigator.geolocation.watchPosition(function (pos) {
+						// console.log([pos.coords.longitude, pos.coords.latitude]);
+						add({
+							coord: pos.coords.longitude+","+pos.coords.latitude,
+							timed: new Date().getTime(),
+						});
+					},function (err) {
+						alert("Error! - Terjadi masalah saat mengambil lokasi - error")
+						console.log(err)
+					})
+				}
+			});
+
+			$('#untrackme').click(function (e) { 
+				e.preventDefault();
+				cleardb('dbcoordinate')
+
+			});
+
+			$('#readcoord').click(function (e) {
+				e.preventDefault();
+				readAll();
+			});
+		});
+	</script>
+</body>
+</html>
