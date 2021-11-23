@@ -14,19 +14,19 @@ self.addEventListener('install',
         e.waitUntil(
             caches.open(CACHE_NAME).then(function (cache) {
 				return cache.addAll([
-					'/',
-					'travelmanager.html',
-                    '/hg.png',
-                    '/gingerbreadhouse.png',
-					'/striped-witch-hat.png',
-					'/googlemaps.png',
-					'/edna.jpg',
-                    '/brotkrumen.css',
-                    '/echo.js',
-					'/RegisterServiceWorker.js',
-                    '/brotkrumen.json',
-                    '/TravelManagerPolyfill.js',
-                    '/HandleMap.js'
+					'./',
+					'./travelmanager.html',
+                    './hg.png',
+                    './gingerbreadhouse.png',
+					'./striped-witch-hat.png',
+					'./googlemaps.png',
+					'./edna.jpg',
+                    './brotkrumen.css',
+                    './echo.js',
+					'./RegisterServiceWorker.js',
+                    './brotkrumen.json',
+                    './TravelManagerPolyfill.js',
+                    './HandleMap.js'
                 ]).then(() => self.skipWaiting());
             })
         );
