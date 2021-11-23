@@ -74,7 +74,7 @@
 							watchpos = geoloc.watchPosition(function (pos) {
 								add({
 									coord: pos.coords.longitude+","+pos.coords.latitude,
-									timed: new Date().getTime(),
+									timed: new Date().getHours()+':'+new Date().getMinutes()+':'+new Date().getSeconds(),
 								});
 							},function (err) {
 								alert("Error! - Terjadi masalah saat mengambil lokasi - error")
@@ -135,7 +135,7 @@
 					watchpos = geoloc.watchPosition(function (pos) {
 						add({
 							coord: pos.coords.longitude+","+pos.coords.latitude,
-							timed: new Date().getTime(),
+							timed: new Date().getHours()+':'+new Date().getMinutes()+':'+new Date().getSeconds(),
 						});
 					},function (err) {
 						alert("Error! - Terjadi masalah saat mengambil lokasi - error")
@@ -156,6 +156,7 @@
 
 			$('#readcoord').click(function (e) {
 				e.preventDefault();
+				noSleep.enable();
 				readAll();
 			});
 		});
