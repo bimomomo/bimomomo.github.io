@@ -1,4 +1,4 @@
-// 'use strict';
+'use strict';
 /* identification division.
  * program-id.    RegisterServiceWorker.
  * author.        Richard Maher.
