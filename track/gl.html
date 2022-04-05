@@ -10,13 +10,23 @@
 <body>
 <pre></pre>	
 <script>
+	var p=[];
 	navigator.geolocation.watchPosition(function (pos) {
+		var distance = null;
+		if (p.length>0) {
+			var llt = p[p.length-1].coords.latitude
+			var lln = p[p.length-1].coords.longitude
+			distance = getCoordsDistance(pos.coords.latitude,pos.coords.longitude,llt,lln)
+		}
+		pos.distance = distance
+		p.push(pos)
 		$('pre').html(
 			$('pre').html()+'\n'+
 			pos.coords.accuracy+'\n'+
-			pos.coords.latitude+','+pos.coords.longitude
+			pos.coords.latitude+','+pos.coords.longitude+'\n'+
+			pos.distance
 		)
-		console.log(pos)
+		console.log(p)
 	});
 
 	function getCoordsDistance(lat1, lon1, lat2, lon2) {
