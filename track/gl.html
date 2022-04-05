@@ -12,6 +12,7 @@
 <script>
 	navigator.geolocation.watchPosition(function (pos) {
 		$('pre').html(
+			$('pre').html()+'\n'+
 			pos.coords.accuracy+'\n'+
 			pos.coords.latitude+','+pos.coords.longitude
 		)
@@ -19,7 +20,6 @@
 	});
 
 	function getCoordsDistance(lat1, lon1, lat2, lon2) {
-			//EQUIRECTANGULAR FORMULA [MEH.... IT'S OKAY, I GUESS] || FAST
 			var R = 6371000;//Mean Earth Radius in Meter
 			var latf = (lat1)*(Math.PI/180);//lat1 angle in radian
 			var lonf = (lon1)*(Math.PI/180);//lon1 angle in radian
