@@ -37,6 +37,10 @@
 			pos.distance+' || '+pos.timediff+'\n'+
 			$('pre').html()
 		)
+	}, function (err) {console.warn('ERROR(' + err.code + '): ' + err.message)}, {
+		enableHighAccuracy: true,
+		timeout: 5000,
+		maximumAge: 300
 	});
 
 	function getCoordsDistance(lat1, lon1, lat2, lon2) {
