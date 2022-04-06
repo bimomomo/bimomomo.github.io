@@ -6,27 +6,37 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>GLT</title>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+	<style>
+		body{
+			font-family: monospace;
+			background-color: black;
+			color: green;
+		}
+	</style>
 </head>
 <body>
-<pre></pre>	
+><pre></pre>	
 <script>
 	var p=[];
 	navigator.geolocation.watchPosition(function (pos) {
 		var distance = null;
+		var timediff = null;
 		if (p.length>0) {
 			var llt = p[p.length-1].coords.latitude
 			var lln = p[p.length-1].coords.longitude
 			distance = getCoordsDistance(pos.coords.latitude,pos.coords.longitude,llt,lln)
+			timediff = pos.timestamp-p[p.length-1].timestamp
 		}
 		pos.distance = distance
+		pos.timediff = timediff
 		p.push(pos)
 		$('pre').html(
-			$('pre').html()+'\n'+
-			pos.coords.accuracy+'\n'+
-			pos.coords.latitude+','+pos.coords.longitude+'\n'+
-			pos.distance
+			pos.timestamp+' || '+
+			pos.coords.accuracy+' || '+
+			pos.coords.latitude+','+pos.coords.longitude+' || '+
+			pos.distance+' || '+pos.timediff+'\n'+
+			$('pre').html()
 		)
-		console.log(p)
 	});
 
 	function getCoordsDistance(lat1, lon1, lat2, lon2) {
