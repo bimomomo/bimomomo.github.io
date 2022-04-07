@@ -1,0 +1,82 @@
+<html>
+    <head>
+        <title>Face App</title>
+		<link href=
+"https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            rel="stylesheet">
+  
+    <script src=
+"http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" 
+    type="text/javascript">
+  
+    </script>
+  
+    <script src=
+"https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js">
+    </script>
+        <style>
+        #overlay, .overlay {
+				position: absolute;
+				top: 0;
+				left: 0;
+            }
+			.booth{
+				width:60%;
+				height:50%;
+				background:#ccc;
+				border:10px solid #ddd;
+				margin: 0px auto;
+			}
+        </style>
+    </head>
+    <body>
+		<video id="originalImg" controls width="320" height="320">
+			<!-- <source src="./images/people/oppenheimer.mp4" type="video/mp4"> -->
+		</video>
+        <!-- <img src="./images/people/oppenheimer.mp4" id="originalImg"/> -->
+        <canvas id="reflay" class="overlay"></canvas>
+		<div class="text-right">
+			<a href="#!" class="btn btn-danger" 
+				onClick="stop()">
+				Stop Cam
+			</a>
+			<a href="#!" class="btn btn-success"
+				onClick="start()">
+				Start Cam
+			</a>
+		</div>
+
+		<script>
+			var stop = function () {
+				var stream = video.srcObject;
+				var tracks = stream.getTracks();
+				for (var i = 0; i < tracks.length; i++) {
+					var track = tracks[i];
+					track.stop();
+				}
+				video.srcObject = null;
+			}
+			var start = function () {
+				var video = document.getElementById('originalImg'),
+					vendorUrl = window.URL || window.webkitURL;
+				if (navigator.mediaDevices.getUserMedia) {
+					navigator.mediaDevices.getUserMedia({ video: true })
+						.then(function (stream) {
+							video.srcObject = stream;
+						}).catch(function (error) {
+							console.log("Something went wrong!");
+						});
+				}
+			}
+			$(function () {
+				start();
+			}); 
+		</script>
+        <script src="./js/jquery-2.1.1.min.js"></script>
+        <script src="./js/face-api.js"></script>
+        <script src="./js/faceSystem.js"></script>
+    </body>
+</html>
+
+
+
