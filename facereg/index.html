@@ -30,11 +30,15 @@
         </style>
     </head>
     <body>
-		<video id="originalImg" width="320" height="320" autoplay>
-			<!-- <source src="./images/people/oppenheimer.mp4" type="video/mp4"> -->
-		</video>
-        <!-- <img src="./images/people/oppenheimer.mp4" id="originalImg"/> -->
-        <canvas id="reflay" class="overlay"></canvas>
+		<span id="desc" class="float-right"></span>
+		<br>
+
+			<video id="originalImg" width="320" height="320" autoplay>
+				<!-- <source src="./images/people/oppenheimer.mp4" type="video/mp4"> -->
+			</video>
+			<!-- <img src="./images/people/oppenheimer.mp4" id="originalImg"/> -->
+			<canvas id="reflay" class="overlay"></canvas>
+
 		<div class="text-right">
 			<a href="#!" class="btn btn-danger" 
 				onClick="stop()">
@@ -44,38 +48,66 @@
 				onClick="start()">
 				Start Cam
 			</a>
+			<button class="btn btn-primary" onClick="askPermission()">Access</button>
 		</div>
 
+        <script src="./js/jquery-2.1.1.min.js"></script>
+        <script src="./js/face-api.min.js"></script>
+        <script src="./js/faceSystem.js"></script>
+		<script class="this-is-the-Ai">
+
+			// async function runfreg(){
+			// 	await face()
+			// 	await setTimeout(async () => await runfreg(),5000)
+			// }
+
+			// async function face(){
+			// 	console.log('work')
+				
+
+			// 	const img= document.getElementById('originalImg')
+			// 	let faceDescriptions = await faceapi.detectAllFaces(img).withFaceLandmarks().withFaceDescriptors().withFaceExpressions()
+			// 	const canvas = $('#reflay').get(0)
+			// 	faceapi.matchDimensions(canvas, img)
+
+			// 	faceDescriptions = faceapi.resizeResults(faceDescriptions, img)
+			// 	faceapi.draw.drawDetections(canvas, faceDescriptions)
+			// 	faceapi.draw.drawFaceLandmarks(canvas, faceDescriptions)
+			// 	faceapi.draw.drawFaceExpressions(canvas, faceDescriptions)
+
+			// }
+		</script>
 		<script>
-			var stop = function () {
+			function stop() {
 				var stream = video.srcObject;
 				var tracks = stream.getTracks();
+
 				for (var i = 0; i < tracks.length; i++) {
 					var track = tracks[i];
 					track.stop();
 				}
 				video.srcObject = null;
 			}
-			var start = function () {
-				var video = document.getElementById('originalImg'),
-					vendorUrl = window.URL || window.webkitURL;
+
+			async function start() {
+				var video = document.getElementById("originalImg"), vendorURL = window.URL || window.webkitURL;
+
 				if (navigator.mediaDevices.getUserMedia) {
-					navigator.mediaDevices.getUserMedia({ video: true })
+					navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: "user" ,video: { frameRate: { ideal: 10, max: 15 } }} })
 						.then(function (stream) {
 							video.srcObject = stream;
+							face()
 						}).catch(function (error) {
-							console.log("Something went wrong!");
+							console.log("Something went wrong");
 							console.log(error)
 						});
 				}
 			}
 			$(function () {
-				start();
-			}); 
+
+				start(); 
+			});
 		</script>
-        <script src="./js/jquery-2.1.1.min.js"></script>
-        <script src="./js/face-api.min.js"></script>
-        <script src="./js/faceSystem.js"></script>
     </body>
 </html>
 
