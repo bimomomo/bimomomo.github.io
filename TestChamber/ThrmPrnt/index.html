@@ -1,0 +1,16 @@
+
+<script src="https://parzibyte.github.io/plugin-ticket-js/Impresora.js"></script>
+<script>
+let nombreImpresora = "EL NOMBRE DE TU IMPRESORA VA AQUÍ",
+mensaje = "Hola mundo";
+let impresora = new Impresora();
+impresora.setFontSize(1, 1);
+impresora.write(`Tratando de imprimir en ${nombreImpresora}`);
+impresora.write(mensaje);
+impresora.cut();
+impresora.cutPartial(); 
+impresora.imprimirEnImpresora(nombreImpresora)
+    .then(valor => {
+        console.log("Al imprimir: " + valor);
+    });
+</script>
