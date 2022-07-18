@@ -27,6 +27,15 @@
 				border:10px solid #ddd;
 				margin: 0px auto;
 			}
+			#originalImg {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100vw;
+				height: auto;
+				max-width: 100vw;
+				max-height: 100vh;
+			}
         </style>
     </head>
     <body>
@@ -104,8 +113,13 @@
 				}
 			}
 			$(function () {
-
+				$('.overlay').width($('#originalImg').width());
+				$('.overlay').height($('#originalImg').height());
 				start(); 
+			});
+			$(window).resize(function () {
+				$('.overlay').width($('#originalImg').width());
+				$('.overlay').height($('#originalImg').height());
 			});
 		</script>
     </body>

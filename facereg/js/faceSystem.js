@@ -1,6 +1,7 @@
 $(document).ready(function(){
 
 })
+const imgRcg = null;
 async function face() {
 	await loadmodel();
 	await runAi();
@@ -13,12 +14,13 @@ async function loadmodel(){
 	await faceapi.loadFaceLandmarkModel(MODEL_URL)
 	await faceapi.loadFaceRecognitionModel(MODEL_URL)
 	await faceapi.loadFaceExpressionModel(MODEL_URL)
+
+	// imgRcg = await faceapi.fetchImage(imgUrl)
 	
 	$('#desc').html('finish loading model')
 }
 async function runAi(){
 	$('#desc').html('start detecting face')
-	console.log('work')
 	const img= document.getElementById('originalImg')
 	let faceDescriptions = await faceapi.detectAllFaces(img).withFaceLandmarks().withFaceDescriptors().withFaceExpressions()
 	const canvas = $('#reflay').get(0)
