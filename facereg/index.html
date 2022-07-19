@@ -16,21 +16,20 @@
     </script>
         <style>
         	#overlay, .overlay {
-				position: absolute;
-				top: 0;
-				left: 0;
-            }
-			.booth{
-				width:60%;
-				height:50%;
-				background:#ccc;
-				border:10px solid #ddd;
-				margin: 0px auto;
-			}
-			#originalImg {
 				position: fixed;
 				top: 0;
 				left: 0;
+				width:100vw;
+				height:100vh;
+            }
+			#mainContainer{
+				position: fixed;
+				top: 0;
+				left: 0;
+				width:100vw;
+				height:100vh;
+			}
+			#originalImg {
 				width: 100vw;
 				height: auto;
 				max-width: 100vw;
@@ -41,59 +40,34 @@
 				right: 13px;
 				bottom: 13px;
 			}
-			#referenceImage {
-				position: fixed;
-				opacity: 0;
-			}
 		</style>
     </head>
     <body>
 		<br>
-		<img src="img/refimg.jpg" id="referenceImage" >
-		<video id="originalImg" width="320" height="320" autoplay></video>
-		<canvas id="reflay" class="overlay"></canvas>
+		<div id="mainContainer">
+			<video id="originalImg" width="320" height="320" autoplay></video>
+			<canvas id="reflay" class="overlay"></canvas>
+		</div>
 
 		<div id="controlContainer" class="text-right">
-			<a href="#!" class="btn btn-danger" onClick="stop()">
-				Stop Cam
-			</a>
-			<a href="#!" class="btn btn-success" onClick="start()">
-				Start Cam
-			</a>
-			<button class="btn btn-primary" onClick="askPermission()">Access</button>
-			<br>
 			<span id="desc"></span>
 			<br>
 			<span id="matchrate"></span>
+			<br>
+			<a href="#!" class="btn btn-danger" onClick="stop()">
+				Stop Cam
+			</a>
+			<a href="#!" class="btn btn-success" onClick="start('user')">
+				Start Cam
+			</a>
+			<button class="btn btn-primary" onClick="askPermission()">Access</button>
 		</div>
 
         <script src="./js/jquery-2.1.1.min.js"></script>
         <script src="./js/face-api.min.js"></script>
         <script src="./js/faceSystem.js"></script>
-		<script class="this-is-the-Ai">
-
-			// async function runfreg(){
-			// 	await face()
-			// 	await setTimeout(async () => await runfreg(),5000)
-			// }
-
-			// async function face(){
-			// 	console.log('work')
-				
-
-			// 	const img= document.getElementById('originalImg')
-			// 	let faceDescriptions = await faceapi.detectAllFaces(img).withFaceLandmarks().withFaceDescriptors().withFaceExpressions()
-			// 	const canvas = $('#reflay').get(0)
-			// 	faceapi.matchDimensions(canvas, img)
-
-			// 	faceDescriptions = faceapi.resizeResults(faceDescriptions, img)
-			// 	faceapi.draw.drawDetections(canvas, faceDescriptions)
-			// 	faceapi.draw.drawFaceLandmarks(canvas, faceDescriptions)
-			// 	faceapi.draw.drawFaceExpressions(canvas, faceDescriptions)
-
-			// }
-		</script>
 		<script>
+			var video;
 			function stop() {
 				var stream = video.srcObject;
 				var tracks = stream.getTracks();
@@ -106,7 +80,7 @@
 			}
 
 			async function start(fm) {
-				var video = document.getElementById("originalImg"), vendorURL = window.URL || window.webkitURL;
+				video = document.getElementById("originalImg"), vendorURL = window.URL || window.webkitURL;
 
 				if (navigator.mediaDevices.getUserMedia) {
 					navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: fm ,video: { frameRate: { ideal: 10, max: 15 } }} })
@@ -120,13 +94,23 @@
 				}
 			}
 			$(function () {
-				$('.overlay').width($('#originalImg').width());
-				$('.overlay').height($('#originalImg').height());
+				setTimeout(() => {
+					$('.overlay').width($('#originalImg').outerWidth());
+					$('.overlay').height($('#originalImg').outerHeight());
+				}, 700);
 				start("user"); 
 			});
 			$(window).resize(function () {
-				$('.overlay').width($('#originalImg').width());
-				$('.overlay').height($('#originalImg').height());
+				setTimeout(() => {
+					$('.overlay').width($('#originalImg').outerWidth());
+					$('.overlay').height($('#originalImg').outerHeight());
+				}, 700);
+			});
+			$('#originalImg').resize(function () {
+				setTimeout(() => {
+					$('.overlay').width($('#originalImg').outerWidth());
+					$('.overlay').height($('#originalImg').outerHeight());
+				}, 700);
 			});
 		</script>
     </body>

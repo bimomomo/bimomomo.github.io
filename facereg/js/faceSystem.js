@@ -1,14 +1,10 @@
-$(document).ready(function(){
-
-})
-const imgRcg = null;
 async function face() {
 	await loadmodel();
 
 	$('#desc').html('detecting refimg')
 	const labels = ['refimg'];
-	const labeledFaceDescriptors = await Promise.all(
-		labels.map(async label => {
+	
+	const labeledFaceDescriptors = await Promise.all(labels.map(async label => {
 		const imgUrl = 'img/'+label+'.jpg'
 		const img = await faceapi.fetchImage(imgUrl)
 		
@@ -16,11 +12,10 @@ async function face() {
 		if (!faceDescription) {
 			throw new Error('no faces detected for '+label);
 		}
-		
 		const faceDescriptors = [faceDescription.descriptor]
+		console.log(faceDescriptors); 
 		return new faceapi.LabeledFaceDescriptors(label, faceDescriptors)
-		})
-	);
+	}));
 	
 	await runAi(labeledFaceDescriptors);
 }
@@ -32,8 +27,6 @@ async function loadmodel(){
 	await faceapi.loadFaceLandmarkModel(MODEL_URL)
 	await faceapi.loadFaceRecognitionModel(MODEL_URL)
 	await faceapi.loadFaceExpressionModel(MODEL_URL)
-
-	// imgRcg = await faceapi.fetchImage(imgUrl)
 	
 	$('#desc').html('finish loading model')
 }
@@ -41,11 +34,18 @@ async function runAi(m){
 	$('#desc').html('start detecting face')
 	const img = document.getElementById('originalImg')
 	let faceDescriptions = await faceapi.detectAllFaces(img).withFaceLandmarks().withFaceDescriptors().withFaceExpressions()
-	const threshold = 0.3
+	const threshold = 0.39
 	const faceMatcher = new faceapi.FaceMatcher(m, threshold)
 	if (faceDescriptions) {
 		const bm = faceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
-		console.log(bm)
+		if (bm.length>0) {
+			if (bm[0]._label=='refimg') {
+				console.log(bm)
+				$('body').css('background-color','green')
+			}else{
+				$('body').css('background-color','red')
+			}
+		}
 		$('#matchrate').html(bm.toString())
 	}
 
