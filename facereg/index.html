@@ -1,19 +1,15 @@
 <html>
     <head>
         <title>Face App</title>
-		<link href=
-"https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-            rel="stylesheet">
-  
-    <script src=
-"https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" 
-    type="text/javascript">
-  
-    </script>
-  
-    <script src=
-"https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js">
-    </script>
+		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+		<script>
+			var video;
+			var coord;
+			var fcreg;
+			var fcdsc;
+		</script>
         <style>
         	#overlay, .overlay {
 				position: fixed;
@@ -56,20 +52,25 @@
 			<br>
 			<span id="matchrate"></span>
 			<br>
-			<a href="#!" class="btn btn-danger" onClick="stop()">
-				Stop Cam
-			</a>
-			<a href="#!" class="btn btn-success" onClick="start('user')">
-				Start Cam
-			</a>
+			<a href="#!" class="btn btn-danger" onClick="stop()">Stop Cam</a>
+			<a href="#!" class="btn btn-success" onClick="start('user')">Start Cam</a>
 			<button class="btn btn-primary" onClick="askPermission()">Access</button>
+			<button class="btn btn-secondary" onClick="captureimage()">CC</button>
 		</div>
 
         <script src="./js/jquery-2.1.1.min.js"></script>
         <script src="./js/face-api.min.js"></script>
         <script src="./js/faceSystem.js"></script>
 		<script>
-			var video;
+			function getLocation() {
+				if (navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(function (c) {
+						coord = c;
+					});
+				} else { 
+					x.innerHTML = "Geolocation is not supported by this browser.";
+				}
+			}
 			function stop() {
 				var stream = video.srcObject;
 				var tracks = stream.getTracks();
@@ -95,7 +96,30 @@
 						});
 				}
 			}
+
+			function captureimage() {
+				console.log(coord)
+				let c = document.createElement('canvas');
+				let v = document.getElementById('originalImg');
+
+				c.width = ($('#originalImg').outerWidth());
+				c.height = ($('#originalImg').outerHeight());
+
+				let ctx = c.getContext('2d');
+				ctx.drawImage( v, 0, 0, c.width, c.height );
+				ctx.fillText('>TIME<',13,13)
+				ctx.fillText(new Date().getTime(),13,23)
+				ctx.fillText('>COORDINATE<',13,43)
+				ctx.fillText(coord.coords.latitude+','+coord.coords.longitude,13,53)
+				ctx.fillText('>MATCHING FACE<',13,73)
+				ctx.fillText(fcreg.toString(),13,83)
+				let img = c.toDataURL('image/jpeg');
+				console.log(fcdsc)
+				window.open(img, '_blank');
+			}
+
 			$(function () {
+				getLocation();
 				setTimeout(() => {
 					$('.overlay').width($('#originalImg').outerWidth());
 					$('.overlay').height($('#originalImg').outerHeight());
