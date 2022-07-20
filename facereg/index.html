@@ -30,10 +30,12 @@
 				height:100vh;
 			}
 			#originalImg {
-				width: 100vw;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: auto;
 				height: auto;
 				max-width: 100vw;
-				max-height: 100vh;
 			}
 			#controlContainer {
 				position: fixed;
@@ -45,7 +47,7 @@
     <body>
 		<br>
 		<div id="mainContainer">
-			<video id="originalImg" width="320" height="320" autoplay></video>
+			<video id="originalImg" width="350" height="350" autoplay></video>
 			<canvas id="reflay" class="overlay"></canvas>
 		</div>
 
