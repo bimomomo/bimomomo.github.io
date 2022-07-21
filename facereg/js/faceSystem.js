@@ -33,7 +33,7 @@ async function loadmodel(){
 	await faceapi.loadTinyFaceDetectorModel(MODEL_URL)
 	await faceapi.loadFaceLandmarkModel(MODEL_URL)
 	await faceapi.loadFaceRecognitionModel(MODEL_URL)
-	
+
 	$('#desc').html('finish loading model')
 }
 async function runAi(m){
@@ -44,8 +44,9 @@ async function runAi(m){
 
 	const threshold = 0.39
 	const faceMatcher = new faceapi.FaceMatcher(m, threshold)
+	var bm = null;
 	if (faceDescriptions) {
-		const bm = faceMatcher.findBestMatch(faceDescriptions.descriptor)
+		bm = faceMatcher.findBestMatch(faceDescriptions.descriptor)
 		// const bm = faceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
 		if (bm) {
 			if (bm._label=='refimg') {
@@ -72,6 +73,13 @@ async function runAi(m){
 	}
 
 	$('#desc').html('finish detecting face')
-
-	await setTimeout(async () => await this.runAi(m),90)
+	if (bm) {
+		if (bm._label=='refimg') {
+			captureimage()
+		}else{
+			await setTimeout(async () => await this.runAi(m),90)
+		}
+	}else{
+		await setTimeout(async () => await this.runAi(m),90)
+	}
 }
