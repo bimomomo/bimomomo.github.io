@@ -9,6 +9,11 @@
 			var coord;
 			var fcreg;
 			var fcdsc;
+
+			var lodtim = 0;
+			var lodinv;
+			var lodstr = new Date().getTime();
+			var lodend;
 		</script>
         <style>
         	#overlay, .overlay {
@@ -51,6 +56,8 @@
 			<span id="desc"></span>
 			<br>
 			<span id="matchrate"></span>
+			<br>
+			<span id="loadtime"></span>
 			<br>
 			<a href="#!" class="btn btn-danger" onClick="stop()">Stop Cam</a>
 			<a href="#!" class="btn btn-success" onClick="start('user')">Start Cam</a>

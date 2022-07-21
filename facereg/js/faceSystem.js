@@ -33,14 +33,13 @@ async function loadmodel(){
 	await faceapi.loadSsdMobilenetv1Model(MODEL_URL)
 	await faceapi.loadFaceLandmarkModel(MODEL_URL)
 	await faceapi.loadFaceRecognitionModel(MODEL_URL)
-	await faceapi.loadFaceExpressionModel(MODEL_URL)
 	
 	$('#desc').html('finish loading model')
 }
 async function runAi(m){
 	$('#desc').html('start detecting face')
 	const img = document.getElementById('originalImg')
-	let faceDescriptions = await faceapi.detectAllFaces(img).withFaceLandmarks().withFaceDescriptors().withFaceExpressions()
+	let faceDescriptions = await faceapi.detectAllFaces(img).withFaceLandmarks().withFaceDescriptors()
 	const threshold = 0.39
 	const faceMatcher = new faceapi.FaceMatcher(m, threshold)
 	if (faceDescriptions) {
@@ -62,7 +61,10 @@ async function runAi(m){
 	faceDescriptions = faceapi.resizeResults(faceDescriptions, img)
 	faceapi.draw.drawDetections(canvas, faceDescriptions)
 	faceapi.draw.drawFaceLandmarks(canvas, faceDescriptions)
-	faceapi.draw.drawFaceExpressions(canvas, faceDescriptions)
+	if (!lodend) {
+		lodend = new Date().getTime();
+		$('#loadtime').html(((lodend-lodstr)/1000))+'s';
+	}
 	$('#desc').html('finish detecting face')
 
 	await setTimeout(async () => await this.runAi(m),90)
