@@ -46,7 +46,6 @@ async function runAi(m){
 	const faceMatcher = new faceapi.FaceMatcher(m, threshold)
 	if (faceDescriptions) {
 		const bm = faceMatcher.findBestMatch(faceDescriptions.descriptor)
-		console.log(bm)
 		// const bm = faceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
 		if (bm) {
 			if (bm._label=='refimg') {
@@ -54,21 +53,24 @@ async function runAi(m){
 			}else{
 				$('body').css('background-color','red')
 			}
+
 			fcdsc = faceDescriptions.descriptor;
 			fcreg = bm;
+
 			$('#matchrate').html(bm.toString())
+		}
+
+		const canvas = $('#reflay').get(0)
+		faceapi.matchDimensions(canvas, img)
+		faceDescriptions = faceapi.resizeResults(faceDescriptions, img)
+		faceapi.draw.drawDetections(canvas, faceDescriptions)
+		faceapi.draw.drawFaceLandmarks(canvas, faceDescriptions)
+		if (!lodend) {
+			lodend = new Date().getTime();
+			$('#loadtime').html(((lodend-lodstr)/1000))+'s';
 		}
 	}
 
-	const canvas = $('#reflay').get(0)
-	faceapi.matchDimensions(canvas, img)
-	faceDescriptions = faceapi.resizeResults(faceDescriptions, img)
-	faceapi.draw.drawDetections(canvas, faceDescriptions)
-	faceapi.draw.drawFaceLandmarks(canvas, faceDescriptions)
-	if (!lodend) {
-		lodend = new Date().getTime();
-		$('#loadtime').html(((lodend-lodstr)/1000))+'s';
-	}
 	$('#desc').html('finish detecting face')
 
 	await setTimeout(async () => await this.runAi(m),90)
