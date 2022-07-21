@@ -30,7 +30,7 @@ async function loadmodel(){
 	$('#desc').html('start loading model')
 	const MODEL_URL = './models'
 
-	await faceapi.loadSsdMobilenetv1Model(MODEL_URL)
+	await faceapi.loadTinyFaceDetectorModel(MODEL_URL)
 	await faceapi.loadFaceLandmarkModel(MODEL_URL)
 	await faceapi.loadFaceRecognitionModel(MODEL_URL)
 	
@@ -39,18 +39,22 @@ async function loadmodel(){
 async function runAi(m){
 	$('#desc').html('start detecting face')
 	const img = document.getElementById('originalImg')
-	let faceDescriptions = await faceapi.detectAllFaces(img).withFaceLandmarks().withFaceDescriptors()
+	let faceDescriptions = await faceapi.detectSingleFace(img, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor()
+	// let faceDescriptions = await faceapi.detectAllFaces(img, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors()
+
 	const threshold = 0.39
 	const faceMatcher = new faceapi.FaceMatcher(m, threshold)
 	if (faceDescriptions) {
-		const bm = faceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
-		if (bm.length>0) {
-			if (bm[0]._label=='refimg') {
+		const bm = faceMatcher.findBestMatch(faceDescriptions.descriptor)
+		console.log(bm)
+		// const bm = faceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
+		if (bm) {
+			if (bm._label=='refimg') {
 				$('body').css('background-color','green')
 			}else{
 				$('body').css('background-color','red')
 			}
-			fcdsc = faceDescriptions[0].descriptor;
+			fcdsc = faceDescriptions.descriptor;
 			fcreg = bm;
 			$('#matchrate').html(bm.toString())
 		}
