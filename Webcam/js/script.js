@@ -19,7 +19,7 @@ var start = function(){
 			navigator.mediaDevices.getUserMedia({
 					audio: false,
 					video: {
-						facingMode: fm,
+						facingMode: "user",
 						video: {
 							frameRate: {
 								ideal: 10,
