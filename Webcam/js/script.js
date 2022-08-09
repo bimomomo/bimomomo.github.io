@@ -22,6 +22,7 @@ var start = function(){
 		  video.srcObject = stream;
 		}).catch(function (error) {
 		  console.log("Something went wrong!");
+		  alert(error)
 		});
 	}
 }
