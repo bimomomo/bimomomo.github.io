@@ -72,14 +72,14 @@ async function runAi(m){
 		}
 	}
 
-	$('#desc').html('finish detecting face')
-	if (bm) {
-		if (bm._label=='refimg') {
-			// captureimage()
-		}else{
-			await setTimeout(async () => await this.runAi(m),90)
-		}
-	}else{
+	// $('#desc').html('finish detecting face')
+	// if (bm) {
+	// 	if (bm._label=='refimg') {
+	// 		// captureimage()
+	// 	}else{
+	// 		await setTimeout(async () => await this.runAi(m),90)
+	// 	}
+	// }else{
 		await setTimeout(async () => await this.runAi(m),90)
-	}
+	// }
 }

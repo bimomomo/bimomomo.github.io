@@ -14,17 +14,28 @@ var stop = function() {
 var start = function(){
 	var video = document.getElementById('video'),
 		vendorUrl = window.URL || window.webkitURL;
-	video.playsInline = true;
-
-	if (navigator.mediaDevices.getUserMedia) {
-		navigator.mediaDevices.getUserMedia({ video: true })
-		.then(function (stream) {
-		  video.srcObject = stream;
-		}).catch(function (error) {
-		  console.log("Something went wrong!");
-		  alert(error)
-		});
-	}
+		
+		if (navigator.mediaDevices.getUserMedia) {
+			navigator.mediaDevices.getUserMedia({
+					audio: false,
+					video: {
+						facingMode: fm,
+						video: {
+							frameRate: {
+								ideal: 10,
+								max: 15
+							}
+						}
+					}
+				})
+				.then(function(stream) {
+					video.srcObject = stream;
+					face()
+				}).catch(function(error) {
+					console.log("Something went wrong");
+					console.log(error)
+				});
+		}
 }
 $(function() {
     start();

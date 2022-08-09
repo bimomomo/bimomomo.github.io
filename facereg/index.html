@@ -100,6 +100,7 @@
 						}).catch(function (error) {
 							console.log("Something went wrong");
 							console.log(error)
+							alert(error)
 						});
 				}
 			}
@@ -114,6 +115,8 @@
 
 				let ctx = c.getContext('2d');
 				ctx.drawImage( v, 0, 0, c.width, c.height );
+				ctx.font = "bold 9pt Consolas";
+				ctx.fillStyle = "#04aa6d";
 				ctx.fillText('>TIME<',13,13)
 				ctx.fillText(new Date().getTime(),13,23)
 				ctx.fillText('>COORDINATE<',13,43)
