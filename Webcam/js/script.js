@@ -32,6 +32,7 @@ var start = function(){
 				}).catch(function(error) {
 					console.log("Something went wrong");
 					console.log(error)
+					alert(error)
 				});
 		}
 }
