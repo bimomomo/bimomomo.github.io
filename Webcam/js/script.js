@@ -27,10 +27,8 @@ var start = function(){
 							}
 						}
 					}
-				})
-				.then(function(stream) {
+				}).then(function(stream) {
 					video.srcObject = stream;
-					face()
 				}).catch(function(error) {
 					console.log("Something went wrong");
 					console.log(error)
