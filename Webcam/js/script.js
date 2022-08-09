@@ -29,6 +29,7 @@ var start = function(){
 					}
 				}).then(function(stream) {
 					video.srcObject = stream;
+					video.playsInline = true;
 				}).catch(function(error) {
 					console.log("Something went wrong");
 					console.log(error)
