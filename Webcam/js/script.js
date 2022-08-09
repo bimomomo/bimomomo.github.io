@@ -13,7 +13,8 @@ var stop = function() {
 
 var start = function(){
 	var video = document.getElementById('video'),
-	 vendorUrl = window.URL || window.webkitURL;
+		vendorUrl = window.URL || window.webkitURL;
+	video.playsInline = true;
 
 	if (navigator.mediaDevices.getUserMedia) {
 		navigator.mediaDevices.getUserMedia({ video: true })
