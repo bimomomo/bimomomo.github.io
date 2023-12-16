@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HBD MA</title>
+    <style>
+
+        @function textShadow($precision, $size, $color){
+            $value: null;
+            $offset: 0;
+            $length: $size * (1 / $precision) - 1;
+
+            @for $i from 0 through $length {
+                $offset: $offset + $precision;
+                $shadow: $offset + px $offset + px $color;
+                $value: append($value, $shadow, comma);
+            }
+
+            @return $value;
+        }
+
+        .playful span {
+            position: relative;
+            color: #5362F6;
+            text-shadow: textShadow(0.25, 6, #E485F8);
+            animation: scatter 1.75s infinite;
+        }
+
+        .playful span:nth-child(2n) {
+            color: #ED625C;
+            text-shadow: textShadow(0.25, 6, #F2A063);
+            animation-delay: 0.3s;
+        }
+
+        .playful span:nth-child(3n) {
+            color: #FFD913;
+            text-shadow: textShadow(0.25, 6, #6EC0A9);
+            animation-delay: 0.15s;
+        }
+
+        .playful span:nth-child(5n) {
+            color: #555BFF;
+            text-shadow: textShadow(0.25, 6, #E485F8);
+            animation-delay: 0.4s;
+        }
+
+        .playful span:nth-child(7n), .playful span:nth-child(11n) {
+            color: #FF9C55;
+            text-shadow: textShadow(0.25, 6, #FF5555);
+            animation-delay: 0.25s;
+        }
+
+        @keyframes scatter {
+            0% {
+                top: 0;
+            }
+            50% {
+                top: -10px;
+            }
+            100% {
+                top: 0;
+            }
+        }
+
+        body {
+            background-color: #E4FFF7;
+        }
+
+        h1 {
+            font-size: 30px;
+            text-transform: uppercase;
+            font-family: "Archivo Black", "Archivo", sans-serif;
+            font-weight: normal;
+            display: block;
+            width: 666px;
+            max-width: 80vw;
+            min-height: 90px;
+            height: auto;
+            text-align: center;
+            margin: 10rem auto;
+            margin: calc(50vh - 5rem) auto;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css?family=Archivo+Black&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <h1 class="playful" aria-label="HBD">
+        <span aria-hidden="true">H</span>
+        <span aria-hidden="true">A</span>
+        <span aria-hidden="true">P</span>
+        <span aria-hidden="true">P</span>
+        <span aria-hidden="true">Y</span>
+        <span aria-hidden="true"> </span>
+        <br>
+        <span aria-hidden="true">B</span>
+        <span aria-hidden="true">I</span>
+        <span aria-hidden="true">R</span>
+        <span aria-hidden="true">T</span>
+        <span aria-hidden="true">H</span>
+        <span aria-hidden="true">D</span>
+        <span aria-hidden="true">A</span>
+        <span aria-hidden="true">Y</span>
+        <span aria-hidden="true"> </span>
+        <br>
+        <span aria-hidden="true">M</span>
+        <span aria-hidden="true">A</span>
+        <span aria-hidden="true">!</span>
+    </h1>
+    <script>
+        $(document).ready(function () {
+            var d = new Date();
+            console.log(d.getDate(),d.getMonth());
+            if ((d.getDate() != 17 && d.getDate() != 18 && d.getDate() != 16) || d.getMonth() != 11) {
+                $('body').html('');
+            }
+        });
+    </script>
+</body>
+</html>
